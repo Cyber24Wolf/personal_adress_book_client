@@ -1,35 +1,56 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useEffect, useState } from 'react';
+import { handleApiResponse   } from './utils/api';
 
-function App() {
-  const [count, setCount] = useState(0)
-
-  return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+interface Contact {
+  id: number;
+  fullName: string;
+  address: string;
+  phone: string;
+  photoUrl?: string;
+  createdAt: string;
 }
 
-export default App
+function App() {
+  const [contacts, setContacts] = useState<Contact[]>([]);
+  const [loading, setLoading]   = useState(true);
+  const [error, setError]       = useState<string | null>(null);
+
+  useEffect(() => {
+    async function fetchContacts() {
+      try {
+        const response = await fetch('http://localhost:5109/api/contacts');
+        const data = await handleApiResponse<Contact[]>(response);
+        setContacts(data);
+      } catch (e: any) {
+        setError(e.message);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchContacts();
+  }, []);
+
+  if (loading) {
+    return <div>Loading contacts...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+
+  return (
+    <div className="container">
+      <h1>Personal Address Book</h1>
+      <ul className="contact-list">
+        {contacts.map((contact) => (
+          <li key={contact.id} className="contact-item">
+            <p className="contact-name">{contact.fullName}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+export default App;
