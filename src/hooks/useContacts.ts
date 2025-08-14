@@ -17,7 +17,6 @@ export function useContacts(): UseContactsReturn {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // GET: Initial data fetch
   useEffect(() => {
     async function fetchContacts() {
       try {
@@ -33,7 +32,6 @@ export function useContacts(): UseContactsReturn {
     fetchContacts();
   }, []);
 
-  // POST: Add new contact
   const addContact = async (formData: FormData) => {
     try {
       const response = await fetch(`${API_BASE_URL}/contacts`, {
@@ -48,7 +46,6 @@ export function useContacts(): UseContactsReturn {
     }
   };
 
-  // DELETE: Delete a contact
   const deleteContact = async (contactId: number) => {
     try {
       const response = await fetch(`${API_BASE_URL}/contacts/${contactId}`, {
@@ -65,7 +62,6 @@ export function useContacts(): UseContactsReturn {
     }
   };
 
-  // PUT: Update a contact
   const updateContact = async (contactId: number, updatedContactData: FormData) => {
     try {
       const response = await fetch(`${API_BASE_URL}/contacts/${contactId}`, {

@@ -8,7 +8,6 @@ function App() {
   const [addFormError, setAddFormError] = useState<string | null>(null);
   const [isAdding, setIsAdding] = useState(false);
   
-  // Новое состояние для управления отображением формы добавления
   const [showAddForm, setShowAddForm] = useState(false);
   
   const [selectedContactId, setSelectedContactId] = useState<number | null>(null);
@@ -18,7 +17,7 @@ function App() {
 
   const handleToggleAddForm = () => {
     setShowAddForm(!showAddForm);
-    setSelectedContactId(null); // Сбрасываем выбранный контакт
+    setSelectedContactId(null);
   };
 
   const handleAddContact = async (formData: FormData) => {
@@ -26,7 +25,7 @@ function App() {
     setAddFormError(null);
     try {
       await addContact(formData);
-      setShowAddForm(false); // Скрываем форму после успешного добавления
+      setShowAddForm(false);
     } catch (e: any) {
       setAddFormError(e.message);
     } finally {
@@ -47,7 +46,7 @@ function App() {
   
   const handleSelectContact = (id: number) => {
     setSelectedContactId(id);
-    setShowAddForm(false); // Скрываем форму добавления при выборе контакта
+    setShowAddForm(false);
   };
 
   return (
@@ -85,7 +84,7 @@ function App() {
           ) : (
             <ContactList
               contacts={contacts}
-              onContactSelect={handleSelectContact} // Используем новую функцию
+              onContactSelect={handleSelectContact}
               selectedContactId={selectedContactId}
             />
           )}
